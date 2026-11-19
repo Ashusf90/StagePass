@@ -44,3 +44,64 @@ A full-stack MERN (MongoDB, Express.js, React, Node.js) event ticketing and seat
     ├── components/            # DiscoveryPage, SeatSelectorView, TicketsPage,
     │                          # OrganizerDashboard, AdminPanel, AuthModal, Header
     └── types/api.ts           # Shared frontend TypeScript types
+
+Getting Started
+1. Install Dependencies
+Bash
+npm install
+2. Configure Environment Variables
+Copy .env.example to .env and set your configuration (optional for local development):
+Env
+MONGODB_URI=""
+JWT_ACCESS_SECRET="change-me-access-secret-32-chars-min"
+JWT_REFRESH_SECRET="change-me-refresh-secret-32-chars-min"
+QR_SIGNING_SECRET="change-me-qr-signing-secret-32-chars"
+PAYMENT_WEBHOOK_SECRET="change-me-webhook-hmac-secret-32-chars"
+Note: If MONGODB_URI is left empty, StagePass automatically starts an in-memory MongoDB instance via mongodb-memory-server and seeds sample users, events, seats, bookings, and audit logs on startup.
+3. Run in Development
+Bash
+npm run dev
+The application and API run together on http://localhost:3000.
+4. Type Check & Production Build
+Bash
+npm run lint
+npm run build
+npm start
+Seeded Demo Accounts
+All seeded accounts use password Password123! and can also be accessed via one-click sign-in inside the Sign In modal:
+Role	Name	Email	Notes
+Attendee	Alex Rivera	alex@stagepass.io	Pre-seeded confirmed booking (SP-8492KL) with QR pass
+Organizer (Approved)	Elena Vance	elena@luminaevents.com	Owns seeded Concert, Festival & Summit events
+Organizer (Pending)	Marcus Chen	marcus@horizonlive.io	Pending admin approval (The Glass Menagerie)
+Admin	Nadia Sterling	admin@stagepass.io	Platform moderation, webhook logs & audit trail
+Sample promo codes for seeded events: EARLY20 (20% off), MEMBER10 (10% off), SOLSTICE15 (15% off).
+API Endpoints Overview
+Authentication (/api/auth)
+POST /api/auth/register — Register an attendee or organizer account
+POST /api/auth/login — Authenticate and receive access + rotated refresh tokens
+POST /api/auth/refresh — Rotate refresh token and issue fresh access token
+POST /api/auth/logout — Revoke active refresh token
+GET /api/auth/me — Fetch authenticated user profile
+Events (/api/events)
+GET /api/events — List published & approved events (search, category, date)
+GET /api/events/:id — Get event details, live seat map, and tier availability
+POST /api/events — (Organizer/Admin) Create event and generate seat/tier inventory
+PATCH /api/events/:id — (Organizer/Admin) Update event status or add/update promo codes
+GET /api/events/organizer/mine — (Organizer/Admin) List organizer's own events with sales metrics
+GET /api/events/:id/analytics — (Organizer/Admin) Section occupancy and recent bookings
+Seat Locking & Bookings (/api/bookings)
+POST /api/bookings/lock — Atomically hold up to 8 seats/tiers for 10 minutes
+DELETE /api/bookings/:id/lock — Release an active hold early
+POST /api/bookings/:id/checkout — Validate lock ownership, apply promo code, create PaymentIntent (Idempotency-Key supported)
+POST /api/bookings/:id/confirm-sandbox — Dispatch HMAC-signed webhook via sandbox payment gateway (also supports simulateDuplicateProviderEventId testing)
+GET /api/bookings/me — List attendee's bookings and QR passes
+GET /api/bookings/:id — Fetch single booking details
+POST /api/bookings/:id/cancel — Cancel eligible confirmed booking, process refund, and release seats
+Payment Webhooks (/api/webhooks)
+POST /api/webhooks/payment — Verify x-stagepass-signature HMAC-SHA256 header, enforce idempotency on providerEventId, transition seats locked -> booked, confirm booking, and issue signed QR token
+Ticket Verification (/api/tickets)
+POST /api/tickets/verify — (Organizer/Admin) Verify signed QR token, check event match, and atomically mark checkedInAt once
+Admin Moderation (/api/admin)
+GET /api/admin/overview — Platform metrics, organizers, events, bookings, webhook events, and audit logs
+PATCH /api/admin/organizers/:id/status — Approve or suspend an organizer
+PATCH /api/admin/events/:id/moderation — Approve or reject an event listing
