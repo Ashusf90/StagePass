@@ -47,26 +47,28 @@ A full-stack MERN (MongoDB, Express.js, React, Node.js) event ticketing and seat
 
 Getting Started
 1. Install Dependencies
-Bash
+
 npm install
+
 2. Configure Environment Variables
 Copy .env.example to .env and set your configuration (optional for local development):
-Env
+
 MONGODB_URI=""
 JWT_ACCESS_SECRET="change-me-access-secret-32-chars-min"
 JWT_REFRESH_SECRET="change-me-refresh-secret-32-chars-min"
 QR_SIGNING_SECRET="change-me-qr-signing-secret-32-chars"
 PAYMENT_WEBHOOK_SECRET="change-me-webhook-hmac-secret-32-chars"
-Note: If MONGODB_URI is left empty, StagePass automatically starts an in-memory MongoDB instance via mongodb-memory-server and seeds sample users, events, seats, bookings, and audit logs on startup.
+
 3. Run in Development
 Bash
 npm run dev
-The application and API run together on http://localhost:3000.
+
 4. Type Check & Production Build
 Bash
 npm run lint
 npm run build
 npm start
+
 Seeded Demo Accounts
 All seeded accounts use password Password123! and can also be accessed via one-click sign-in inside the Sign In modal:
 Role	Name	Email	Notes
@@ -75,6 +77,7 @@ Organizer (Approved)	Elena Vance	elena@luminaevents.com	Owns seeded Concert, Fes
 Organizer (Pending)	Marcus Chen	marcus@horizonlive.io	Pending admin approval (The Glass Menagerie)
 Admin	Nadia Sterling	admin@stagepass.io	Platform moderation, webhook logs & audit trail
 Sample promo codes for seeded events: EARLY20 (20% off), MEMBER10 (10% off), SOLSTICE15 (15% off).
+
 API Endpoints Overview
 Authentication (/api/auth)
 POST /api/auth/register — Register an attendee or organizer account
