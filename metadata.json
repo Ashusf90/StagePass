@@ -1,0 +1,6 @@
+{
+  "name": "StagePass",
+  "description": "Multi-Vendor Event Ticketing & Seat Reservation System with atomic seat locking, idempotent payment webhooks, and QR entry verification.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
